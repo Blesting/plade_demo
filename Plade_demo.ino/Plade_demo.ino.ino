@@ -17,17 +17,17 @@ void setup() {
 void loop() {
   
   sensorValue = analogRead(potentiometer);
-  set_movement();
+  set_movement_potentiometer();
   taend_led_1();
 
   sensorValue = analogRead(potentiometer2);
-  set_movement();
+  set_movement_potentiometer();
   taend_led_2();
 
   Serial.println(sensorValue);
 }
 
-void set_movement(){
+void set_movement_potentiometer(){
   //Movement = intervaller defineres
   if (sensorValue>800){
     movement = 8;
