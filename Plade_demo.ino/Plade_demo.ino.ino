@@ -17,7 +17,7 @@ void setup() {
 void loop() {
   
   sensorValue = analogRead(potentiometer);
-  set_movement_potentiometer();
+  set_movement_accelerometer();
   taend_led_1();
 
   sensorValue = analogRead(potentiometer2);
@@ -26,6 +26,36 @@ void loop() {
 
   Serial.println(sensorValue);
 }
+
+void set_movement_accelerometer(){
+  //Movement = intervaller defineres
+  if (sensorValue>352){
+    movement = 8;
+  }
+  else if (sensorValue<352 && sensorValue>345){
+    movement = 7;
+  }
+  else if (sensorValue<345 && sensorValue>336){
+    movement = 6;
+  }
+  else if (sensorValue<336 && sensorValue>327){
+    movement = 5;
+  }
+  else if (sensorValue<327 && sensorValue>318){
+    movement = 4;
+  }
+  else if (sensorValue<318 && sensorValue>309){
+    movement = 3;
+  }
+  else if (sensorValue<309 && sensorValue>300){
+    movement = 2;
+  }
+  else if (sensorValue<300){
+    movement = 1;
+  }
+  return movement;
+}
+
 
 void set_movement_potentiometer(){
   //Movement = intervaller defineres
