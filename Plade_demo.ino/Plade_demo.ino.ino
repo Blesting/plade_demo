@@ -7,7 +7,7 @@ const int LED_1 = 3;
 const int LED_2 = 4;
 const int LED_3 = 5;
 const int LED_4 = 6;
-
+//Christian Big Gay in Poo Poo
 void setup() {
   pinMode(ledPin, OUTPUT);
   Serial.begin(9600);
