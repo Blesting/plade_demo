@@ -1,5 +1,5 @@
-int potentiometer = A0;
-int potentiometer2 = A1;
+int pladeH = A0;
+int pladeV = A1;
 int ledPin = 13;
 int sensorValue = 0;
 int movement = 1;
@@ -9,33 +9,106 @@ const int LED_3 = 5;
 const int LED_4 = 6;
 const int LED_5 = 7;
 int leds[2][4]={{5,1,0},{5,1,0}};
+//1. plads er plasering 2. plads er movement 3. plads er cooldown
+
+int func = 0;
+int bx = 0;
+int by = 0;
+int py = 0;
+#include <Wire.h>
 
 void setup() {
+  Wire.begin(2); 
+  Wire.onReceive(receiveEvent);
   Serial.begin(9600);
 
 }
 
 void loop() {
   
-  sensorValue = analogRead(potentiometer);
-  set_movement();
+  sensorValue = analogRead(pladeH);
+  set_movementH();
   leds[0][1] = movement;
 
-  sensorValue = analogRead(potentiometer2);
-  set_movement();
+  sensorValue = analogRead(pladeV);
+  set_movementV();
   leds[1][1] = movement;
 
   
-  movement();
+  movement_();
 
   taend_led_1();
   taend_led_2();
-
-
   Serial.println(sensorValue);
 }
 
-void set_movement(){
+
+
+void receiveEvent(int howMany) {
+  int len = Wire.available();
+  while (len-1 < Wire.available()){
+    func = Wire.read();
+  }
+  if (func == 1){
+    while (1 < Wire.available()){
+      bx = Wire.read();
+    }
+    by = Wire.read();
+  }
+
+  if (bx == 11){
+    sammenlign_h();
+  }
+  else if (bx == 1){
+    sammenlign_v();
+  }
+}
+
+int col = 0;
+
+void sammenlign_h(){
+  py = leds[1][0];
+  Serial.println(by);
+  Serial.println(py);
+  if (py+1 == by){
+    col = 1;
+  }
+  else if (py == by){
+    col = 2;
+  }
+  else if ( py+2 == by){
+    col = 3;
+  }
+}
+
+void sammenlign_v(){
+  py = leds[0][0];
+  Serial.println(by);
+  Serial.println(py);
+  if (py+1 == by){
+    col = 1;
+  }
+  else if (py == by){
+    col = 2;
+  }
+  else if ( py+2 == by){
+    col = 3;
+  }
+}
+
+void set_movementH(){
+  if (sensorValue > 315 && sensorValue < 345){
+    movement = 1;
+  }
+  else if (sensorValue < 315){
+    movement = 0;
+  }
+  else if (sensorValue > 345){
+    movement = 2;
+  }
+}
+
+void set_movementV(){
   if (sensorValue > 320 && sensorValue < 360){
     movement = 1;
   }
@@ -47,7 +120,7 @@ void set_movement(){
   }
 }
 
-void movement(){
+void movement_(){
   
   for (int i = 0; i < 2; i++){
     if (leds[i][1] == 1){
